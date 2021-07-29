@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/reporters'
+require 'pry'
 Minitest::Reporters.use!
 
 require_relative 'automate'
@@ -72,7 +73,7 @@ class Tests < Minitest::Test
       session[:id] = @db.find_id(username)
     end
 
-    assert_equal(session[:message], nil)
+    assert_nil(session[:message], nil)
     refute_equal(session[:id], 4)
   end
 
@@ -90,4 +91,15 @@ class Tests < Minitest::Test
     assert_empty(session)    
   end
 
+  def test_id_verification_in_db
+    @db = DB.new
+    result = @db.find_username(2)
+    result2 = @db.find_id('anothertester')
+
+    if (result2 != 0)
+      assert(true)
+    end 
+  
+    assert_equal(result, 'tester')
+  end
 end
